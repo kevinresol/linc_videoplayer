@@ -68,7 +68,7 @@ public class VideoPlayer {
         player.setVolume(volume, volume);
     }
     public String getError() {
-        return "";
+        return null;
     }
 
     public void renderToTexture(int textureUnit, int textureName) {

@@ -87,12 +87,13 @@ namespace linc {
         }
         
         const char* get_error(void *handle) {
-            jstring ret = (jstring) env->CallObjectMethod((jobject) handle, _getError);
-            if(ret == NULL) {
+            jstring jstr = (jstring) env->CallObjectMethod((jobject) handle, _getError);
+            if(jstr == NULL) {
                 return NULL;
             } else {
-                // TODO: need to release the jstring?
-                return env->GetStringUTFChars(ret, NULL);
+                const char *cstr = env->GetStringUTFChars(jstr, NULL);
+                env->DeleteLocalRef(jstr);
+                return cstr;
             }
         }
         
