@@ -1,19 +1,12 @@
 package linc.videoplayer;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.SurfaceTexture;
 import android.media.MediaPlayer;
-import android.opengl.GLES11;
-import android.opengl.GLES11Ext;
-import android.opengl.GLES20;
-import android.opengl.GLUtils;
 import android.util.Log;
 import android.view.Surface;
 
 import java.io.IOException;
-import java.nio.Buffer;
-import java.nio.ByteBuffer;
 
 /**
  * Created by kevin on 15/3/2017.
@@ -79,6 +72,7 @@ public class VideoPlayer {
         surfaceTexture.updateTexImage();
     }
     public void destroy() {
+
 
     }
 
