@@ -58,7 +58,7 @@ public class VideoPlayer {
         player.setOnErrorListener(new MediaPlayer.OnErrorListener() {
             @Override
             public boolean onError(MediaPlayer mp, int what, int extra) {
-                wrapper.onError("TODO");
+                wrapper.onError("Error - what:" + what + ", extra:" + extra);
                 return false;
             }
         });

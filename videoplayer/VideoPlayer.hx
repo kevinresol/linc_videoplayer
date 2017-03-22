@@ -37,8 +37,8 @@ class VideoPlayer {
 	public function getError():String {
 		return Wrapper.getError(_h);
 	}
-	public function getInfo():Info {
-		return Wrapper.getInfo(_h);
+	public function getTime():Int {
+		return Wrapper.getTime(_h);
 	}
 	public function renderToTexture(textureUnit:Int, textureName:Int):Void {
 		Wrapper.renderToTexture(_h, textureUnit, textureName);
@@ -48,19 +48,19 @@ class VideoPlayer {
 		players.remove(this);
 	}
 	
-	function onReady() {
+	public dynamic function onReady() {
 		trace('onReady');
 	}
-	function onDurationChanged(ms:Int) {
+	public dynamic function onDurationChanged(ms:Int) {
 		trace('onDurationChanged: $ms ms');
 	}
-	function onError(err:String) {
+	public dynamic function onError(err:String) {
 		trace('onError');
 	}
-	function onVideoSizeChanged(width:Int, height:Int) {
+	public dynamic function onVideoSizeChanged(width:Int, height:Int) {
 		trace('onVideoSizeChanged: $width x $height');
 	}
-	function onPlayingStateChanged(playing:Bool) {
+	public dynamic function onPlayingStateChanged(playing:Bool) {
 		trace('onPlayingStateChanged: $playing');
 	}
 	

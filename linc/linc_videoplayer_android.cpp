@@ -121,15 +121,8 @@ namespace linc {
             }
         }
         
-        info get_info(void *handle) {
-            info i;
-            i.width = env->CallIntMethod((jobject) handle, _getWidth); // :Int;
-            i.height = env->CallIntMethod((jobject) handle, _getHeight); // :Int;
-            i.time = env->CallIntMethod((jobject) handle, _getTime); // :Int;
-            i.duration = env->CallIntMethod((jobject) handle, _getDuration); // :Int;
-            i.playing = env->CallBooleanMethod((jobject) handle, _isPlaying); // :Bool;
-            i.volume = env->CallFloatMethod((jobject) handle, _getVolume); // :Bool;
-            return i;
+        int get_time(void *handle) {
+            return env->CallIntMethod((jobject) handle, _getTime);
         }
         
         void render_to_texture(void *handle, int textureUnit, int textureName) {

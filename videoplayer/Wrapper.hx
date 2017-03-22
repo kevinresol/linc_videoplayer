@@ -47,8 +47,8 @@ extern class Wrapper {
     @:native('linc::videoplayer::get_error')
     static function getError(_h:Handle):cpp.ConstCharStar;
     
-    @:native('linc::videoplayer::get_info')
-    static function getInfo(_h:Handle):Info;
+    @:native('linc::videoplayer::get_time')
+    static function getTime(_h:Handle):Int;
     
     @:native('linc::videoplayer::render_to_texture')
     static function renderToTexture(_h:Handle, textureUnit:Int, textureName:Int):Void;

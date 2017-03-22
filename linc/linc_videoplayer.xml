@@ -7,9 +7,15 @@
         <!-- add files and flags to the haxe c++ build -->
 
         <compilerflag value='-I${LINC_VIDEOPLAYER_PATH}/linc/'/>
-        <compilerflag value='-DVIDEOPLAYER_EXAMPLE_DEFINE_FOR_THE_CPP_CODE'/>
 
-        <file name='${LINC_VIDEOPLAYER_PATH}linc/linc_videoplayer.cpp' />
+
+         <section if="android">
+            <file name='${LINC_VIDEOPLAYER_PATH}linc/linc_videoplayer_android.cpp' />
+        </section>
+        
+        <section if="iphone">
+            <file name='${LINC_VIDEOPLAYER_PATH}linc/linc_videoplayer_iphone.mm' />
+        </section>
 
     </files>
 
