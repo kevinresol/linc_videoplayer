@@ -1,13 +1,18 @@
 package videoplayer;
 
+import cpp.Callable;
+
 class VideoPlayer {
 	
-	var _h:cpp.Pointer<Void>;
+	static var players:Array<VideoPlayer> = [];
+	
+	var _h:Handle;
 	
 	public function new() {
 		_h = Wrapper.create();
+		players.push(this);
+		_init();
 	}
-	
 	public function setUrl(url:String):Void {
 		Wrapper.setUrl(_h, url);
 	}
@@ -40,5 +45,86 @@ class VideoPlayer {
 	}
 	public function destroy():Void {
 		Wrapper.destroy(_h);
+		players.remove(this);
 	}
+	
+	function onReady() {
+		trace('onReady');
+	}
+	function onDurationChanged(ms:Int) {
+		trace('onDurationChanged: $ms ms');
+	}
+	function onError(err:String) {
+		trace('onError');
+	}
+	function onVideoSizeChanged(width:Int, height:Int) {
+		trace('onVideoSizeChanged: $width x $height');
+	}
+	function onPlayingStateChanged(playing:Bool) {
+		trace('onPlayingStateChanged: $playing');
+	}
+	
+	static var inited = false;
+	static function _init() {
+		if(inited) return;
+		inited = true;
+		Wrapper.registerCallbacks(
+			Callable.fromStaticFunction(_onReady),
+			Callable.fromStaticFunction(_onDurationChanged),
+			Callable.fromStaticFunction(_onError),
+			Callable.fromStaticFunction(_onVideoSizeChanged),
+			Callable.fromStaticFunction(_onPlayingStateChanged)
+		);
+	}
+	
+	static function _onReady(_h:Handle) {
+		for(p in players) {
+			if(p._h == _h) {
+				p.onReady();
+				return;
+			}
+		}
+		trace('_onReady');
+	}
+	
+	static function _onDurationChanged(_h:Handle, ms:Int) {
+		for(p in players) {
+			if(p._h == _h) {
+				p.onDurationChanged(ms);
+				return;
+			}
+		}
+		trace('_onDurationChanged');
+	}
+	
+	static function _onError(_h:Handle, err:String) {
+		for(p in players) {
+			if(p._h == _h) {
+				p.onError(err);
+				return;
+			}
+		}
+		trace('_onError');
+	}
+	
+	static function _onVideoSizeChanged(_h:Handle, width:Int, height:Int) {
+		for(p in players) {
+			if(p._h == _h) {
+				p.onVideoSizeChanged(width, height);
+				return;
+			}
+		}
+		trace('_onVideoSizeChanged');
+	}
+	
+	static function _onPlayingStateChanged(_h:Handle, playing:Bool) {
+		for(p in players) {
+			if(p._h == _h) {
+				p.onPlayingStateChanged(playing);
+				return;
+			}
+		}
+		trace('_onPlayingStateChanged');
+	}
+	
 }

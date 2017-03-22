@@ -24,6 +24,44 @@ public class VideoPlayer {
         this.context = context;
         player = new MediaPlayer();
         Log.i(TAG, "Created MediaPlayer");
+
+        final VideoPlayer wrapper = this;
+        player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                wrapper.onReady();
+                wrapper.onDurationChanged(player.getDuration());
+            }
+        });
+
+        player.setOnVideoSizeChangedListener(new MediaPlayer.OnVideoSizeChangedListener() {
+            @Override
+            public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
+                wrapper.onVideoSizeChanged(width, height);
+            }
+        });
+
+        player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                wrapper.onPlayingStateChanged(false);
+            }
+        });
+
+        player.setOnSeekCompleteListener(new MediaPlayer.OnSeekCompleteListener() {
+            @Override
+            public void onSeekComplete(MediaPlayer mp) {
+                wrapper.onPlayingStateChanged(true);
+            }
+        });
+
+        player.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+            @Override
+            public boolean onError(MediaPlayer mp, int what, int extra) {
+                wrapper.onError("TODO");
+                return false;
+            }
+        });
     }
 
     public static VideoPlayer create(Context context) {
@@ -44,15 +82,19 @@ public class VideoPlayer {
 
     public void play() {
         player.start();
+        onPlayingStateChanged(true);
     }
     public void pause() {
         player.pause();
+        onPlayingStateChanged(false);
     }
     public void stop() {
         player.stop();
+        onPlayingStateChanged(false);
     }
     public void resume() {
         player.start();
+        onPlayingStateChanged(true);
     }
     public void seek(float seconds) {
         player.seekTo((int) (seconds * 1000));
@@ -77,7 +119,6 @@ public class VideoPlayer {
     }
 
     public int getWidth() {
-
         return player.getVideoWidth();
     }
     public int getHeight() {
@@ -95,4 +136,10 @@ public class VideoPlayer {
     public float getVolume() {
         return (float) 0.1;
     }
+
+    private native void onVideoSizeChanged(int width, int height);
+    private native void onDurationChanged(int ms);
+    private native void onPlayingStateChanged(boolean playing);
+    private native void onReady();
+    private native void onError(String err);
 }

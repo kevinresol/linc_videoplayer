@@ -19,6 +19,14 @@ namespace linc {
             float volume;
         } info;
 
+        void register_callbacks(
+            ::cpp::Function<void(cpp::Pointer<void>)> onReady,
+            ::cpp::Function<void(cpp::Pointer<void>, int)> onPositionChanged,
+            ::cpp::Function<void(cpp::Pointer<void>, ::String)> onError,
+            ::cpp::Function<void(cpp::Pointer<void>, int, int)> onVideoSizeChanged,
+            ::cpp::Function<void(cpp::Pointer<void>, bool)> onPlayingStateChanged
+        );
+        
         extern void* create();
         extern void set_url(void *handle, const char *urlString);
         extern void play(void *handle);

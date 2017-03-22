@@ -1,5 +1,7 @@
 package videoplayer;
 
+import cpp.Callable;
+
 @:keep
 @:include('linc_videoplayer.h')
 #if !display
@@ -8,7 +10,16 @@ package videoplayer;
 #end
 @:native
 extern class Wrapper {
-
+    
+    @:native('linc::videoplayer::register_callbacks')
+    static function registerCallbacks(
+        onReady:Callable<Handle->Void>,
+        onDurationChanged:Callable<Handle->Int->Void>,
+        onError:Callable<Handle->String->Void>,
+        onVideoSizeChanged:Callable<Handle->Int->Int->Void>,
+        onPlayingStateChanged:Callable<Handle->Bool->Void>
+    ):Void;
+    
     @:native('linc::videoplayer::create')
     static function create():Handle;
     
@@ -46,5 +57,3 @@ extern class Wrapper {
     static function destroy(_h:Handle):Void;
 
 } //VideoPlayer
-
-typedef Handle = cpp.Pointer<Void>;
