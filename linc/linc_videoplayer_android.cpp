@@ -61,7 +61,6 @@ namespace linc {
             _resume = env->GetMethodID(clazz, "resume", "()V");
             _seek = env->GetMethodID(clazz, "seek", "(F)V");
             _setVolume = env->GetMethodID(clazz, "setVolume", "(F)V");
-            _getError = env->GetMethodID(clazz, "getError", "()Ljava/lang/String;");
             _getWidth = env->GetMethodID(clazz, "getWidth", "()I");
             _getHeight = env->GetMethodID(clazz, "getHeight", "()I");
             _getTime = env->GetMethodID(clazz, "getTime", "()I");
@@ -114,18 +113,6 @@ namespace linc {
         void set_volume(void *handle, float volume) {
             JNIEnv* env = (JNIEnv*)SDL_AndroidGetJNIEnv();
             env->CallVoidMethod((jobject) handle, _setVolume, volume);
-        }
-        
-        const char* get_error(void *handle) {
-            JNIEnv* env = (JNIEnv*)SDL_AndroidGetJNIEnv();
-            jstring jstr = (jstring) env->CallObjectMethod((jobject) handle, _getError);
-            if(jstr == NULL) {
-                return NULL;
-            } else {
-                const char *cstr = env->GetStringUTFChars(jstr, NULL);
-                env->DeleteLocalRef(jstr);
-                return cstr;
-            }
         }
         
         int get_time(void *handle) {

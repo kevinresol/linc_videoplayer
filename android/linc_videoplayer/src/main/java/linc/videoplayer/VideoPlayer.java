@@ -114,9 +114,6 @@ public class VideoPlayer {
     public void setVolume(float volume) {
         player.setVolume(volume, volume);
     }
-    public String getError() {
-        return null;
-    }
 
     public void renderToTexture(int textureUnit, int textureName) {
         if(surfaceTexture == null) {
