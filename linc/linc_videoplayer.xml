@@ -15,6 +15,7 @@
         
         <section if="iphone">
             <file name='${LINC_VIDEOPLAYER_PATH}linc/linc_videoplayer_iphone.mm' />
+            <compilerflag value='-fobjc-arc'/><!--Enable ARC-->
         </section>
 
     </files>
