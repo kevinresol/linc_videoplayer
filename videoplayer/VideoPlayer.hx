@@ -31,11 +31,11 @@ class VideoPlayer {
 	public function seek(seconds:Float):Void {
 		Wrapper.seek(_h, seconds);
 	}
+	public function getVolume():Float {
+		return Wrapper.getVolume(_h);
+	}
 	public function setVolume(volume:Float):Void {
 		Wrapper.setVolume(_h, volume);
-	}
-	public function getError():String {
-		return Wrapper.getError(_h);
 	}
 	public function getTime():Int {
 		return Wrapper.getTime(_h);

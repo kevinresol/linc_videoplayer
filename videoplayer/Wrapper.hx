@@ -41,6 +41,9 @@ extern class Wrapper {
     @:native('linc::videoplayer::seek')
     static function seek(_h:Handle, seconds:Float):Void;
     
+    @:native('linc::videoplayer::get_volume')
+    static function getVolume(_h:Handle):Float;
+    
     @:native('linc::videoplayer::set_volume')
     static function setVolume(_h:Handle, volume:Float):Void;
     

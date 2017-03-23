@@ -10,12 +10,22 @@
 #import <Foundation/Foundation.h>
 #import <AVFoundation/AVFoundation.h>
 
+// Forward declaration
+namespace linc {
+    namespace videoplayer {
+        void on_ready(void *handle);
+        void on_duration_changed(void *handle, int ms);
+        void on_video_size_changed(void *handle, int width, int height);
+        void on_error(void *handle, const char *err);
+        void on_playing_state_changed(void *handle, bool playing);
+    }
+}
+
 @interface VrHandle : NSObject
 
 @property(readonly) AVPlayer *player;
 @property(readonly) AVPlayerItem *item;
 @property(readonly) AVPlayerItemVideoOutput *output;
-@property(readonly) BOOL playing;
 
 - (void)play;
 - (void)pause;
@@ -25,14 +35,11 @@
 
 @end
 
-@implementation VrHandle {
-    NSString *_lastError;
-}
+@implementation VrHandle
 
 @synthesize player = _player;
 @synthesize item = _item;
 @synthesize output = _output;
-@synthesize playing = _playing;
 
 int itemContext;
 
@@ -61,12 +68,12 @@ int itemContext;
             [_player play];
         }
     }
-    _playing = YES;
+    linc::videoplayer::on_playing_state_changed((__bridge void *)self, true);
 }
 
 - (void)pause {
     if(_player) [_player pause];
-    _playing = NO;
+    linc::videoplayer::on_playing_state_changed((__bridge void *)self, false);
 }
 
 - (void)stop {
@@ -78,12 +85,6 @@ int itemContext;
         _item = nil;
     }
 
-}
-
-- (NSString *)getError {
-    NSString *err = _lastError;
-    _lastError = nil;
-    return err;
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath
@@ -104,13 +105,16 @@ int itemContext;
         }
         // Switch over the status
         switch (status) {
-            case AVPlayerItemStatusReadyToPlay:
+            case AVPlayerItemStatusReadyToPlay:{
+                linc::videoplayer::on_duration_changed((__bridge void *)self, _item.duration.timescale == 0 ? 0 : (int) (_item.duration.value * 1000 / _item.duration.timescale));
+                linc::videoplayer::on_video_size_changed((__bridge void *)self, (int) _item.presentationSize.width, (int) _item.presentationSize.height);
+                linc::videoplayer::on_ready((__bridge void *)self);
                 [self play];
-                break;
+            }   break;
             case AVPlayerItemStatusFailed:{
                 NSLog(@"AVPlayerItemStatusFailed");
                 AVPlayerItem *item = object;
-                _lastError = item.error.description;
+                linc::videoplayer::on_error((__bridge void *)self, [item.error.description UTF8String]);
             }   break;
             case AVPlayerItemStatusUnknown:
                 // Not ready
@@ -120,7 +124,7 @@ int itemContext;
 }
 
 -(void)itemDidFinishPlaying:(NSNotification *) notification {
-    _playing = NO;
+    linc::videoplayer::on_playing_state_changed((__bridge void *)self, false);
 }
 
 @end
@@ -187,22 +191,20 @@ namespace linc {
             [h.item seekToTime:CMTimeMake((int) seconds * 1000, 1000) toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
         }
         
+        float get_volume(void *handle) {
+            VrHandle *h = (__bridge VrHandle *) handle;
+            return h.player ? h.player.volume : 1.;
+        }
+        
         void set_volume(void *handle, float volume) {
             VrHandle *h = (__bridge VrHandle *) handle;
             h.player.volume = volume;
         }
         
-        const char* get_error(void *handle) {
-            VrHandle *h = (__bridge VrHandle *) handle;
-            NSString *err = [h getError];
-            if(err) return [err UTF8String];
-            return NULL;
-
-        }
-        
         int get_time(void *handle) {
             VrHandle *h = (__bridge VrHandle *) handle;
-            return 0; // TODO
+            CMTime currentTime = [h.item currentTime];
+            return currentTime.timescale == 0 ? 0 : (int) (currentTime.value * 1000 / currentTime.timescale);
         }
         
         void render_to_texture(void *handle, int textureUnit, int textureName) {
@@ -227,6 +229,7 @@ namespace linc {
         
         void destroy(void *handle) {
             VrHandle *h = (VrHandle *) CFBridgingRelease(handle);
+            [h stop];
         }
         
         void on_ready(void *handle) {

@@ -34,8 +34,8 @@ namespace linc {
         extern void stop(void *handle);
         extern void resume(void *handle);
         extern void seek(void *handle, float seconds);
+        extern float get_volume(void *handle);
         extern void set_volume(void *handle, float volume);
-        extern const char* get_error(void *handle);
         extern int get_time(void *handle);
         extern void render_to_texture(void *handle, int textureUnit, int textureName);
         extern void destroy(void *handle);
