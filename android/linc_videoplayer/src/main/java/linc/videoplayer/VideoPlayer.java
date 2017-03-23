@@ -123,27 +123,11 @@ public class VideoPlayer {
         surfaceTexture.updateTexImage();
     }
     public void destroy() {
-
-
+        // TODO
     }
 
-    public int getWidth() {
-        return player.getVideoWidth();
-    }
-    public int getHeight() {
-        return player.getVideoHeight();
-    }
     public int getTime() {
         return player.getCurrentPosition();
-    }
-    public int getDuration() {
-        return player.getDuration();
-    }
-    public boolean isPlaying() {
-        return player.isPlaying();
-    }
-    public float getVolume() {
-        return (float) 0.1;
     }
 
     private native void onVideoSizeChanged(int width, int height);

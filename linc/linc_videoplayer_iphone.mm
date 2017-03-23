@@ -191,11 +191,6 @@ namespace linc {
             [h.item seekToTime:CMTimeMake((int) seconds * 1000, 1000) toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
         }
         
-        float get_volume(void *handle) {
-            VrHandle *h = (__bridge VrHandle *) handle;
-            return h.player ? h.player.volume : 1.;
-        }
-        
         void set_volume(void *handle, float volume) {
             VrHandle *h = (__bridge VrHandle *) handle;
             h.player.volume = volume;

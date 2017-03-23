@@ -18,13 +18,7 @@ namespace linc {
         jmethodID _resume;
         jmethodID _seek;
         jmethodID _setVolume;
-        jmethodID _getError;
-        jmethodID _getWidth;
-        jmethodID _getHeight;
         jmethodID _getTime;
-        jmethodID _getDuration;
-        jmethodID _isPlaying;
-        jmethodID _getVolume;
         jmethodID _renderToTexture;
         jmethodID _destroy;
         
@@ -61,12 +55,7 @@ namespace linc {
             _resume = env->GetMethodID(clazz, "resume", "()V");
             _seek = env->GetMethodID(clazz, "seek", "(F)V");
             _setVolume = env->GetMethodID(clazz, "setVolume", "(F)V");
-            _getWidth = env->GetMethodID(clazz, "getWidth", "()I");
-            _getHeight = env->GetMethodID(clazz, "getHeight", "()I");
             _getTime = env->GetMethodID(clazz, "getTime", "()I");
-            _getDuration = env->GetMethodID(clazz, "getDuration", "()I");
-            _isPlaying = env->GetMethodID(clazz, "isPlaying", "()Z");
-            _getVolume = env->GetMethodID(clazz, "getVolume", "()F");
             _renderToTexture = env->GetMethodID(clazz, "renderToTexture", "(II)V");
             _destroy = env->GetMethodID(clazz, "destroy", "()V");
 
