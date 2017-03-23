@@ -31,6 +31,7 @@ public class VideoPlayer {
             public void onPrepared(MediaPlayer mp) {
                 wrapper.onReady();
                 wrapper.onDurationChanged(player.getDuration());
+                wrapper.play();
             }
         });
 
@@ -69,11 +70,22 @@ public class VideoPlayer {
     }
 
     public void setUrl(String url) {
+        Log.i("VIDEOPLAYER", "set url: " + url);
         try {
+            onPlayingStateChanged(true);
+            player.reset();
             player.setDataSource(url);
-            player.prepare();
+            player.prepareAsync();
         } catch(IOException ex) {
-            Log.i(TAG, ex.getMessage());
+            Log.i(TAG, ex.toString());
+            ex.printStackTrace();
+        } catch(IllegalArgumentException ex) {
+            Log.i(TAG, ex.toString());
+            ex.printStackTrace();
+        } catch(SecurityException ex) {
+            Log.i(TAG, ex.toString());
+            ex.printStackTrace();
+        } catch(IllegalStateException ex) {
             Log.i(TAG, ex.toString());
             ex.printStackTrace();
         }

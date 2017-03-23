@@ -10,7 +10,6 @@ namespace linc {
 
     namespace videoplayer {
         
-        JNIEnv* env;
         jmethodID _create;
         jmethodID _setUrl;
         jmethodID _play;
@@ -52,7 +51,7 @@ namespace linc {
         }
 
         void* create() {
-            env = (JNIEnv*)SDL_AndroidGetJNIEnv();
+            JNIEnv* env = (JNIEnv*)SDL_AndroidGetJNIEnv();
             jclass clazz = env->FindClass("linc/videoplayer/VideoPlayer");
             _create = env->GetStaticMethodID(clazz, "create", "(Landroid/content/Context;)Llinc/videoplayer/VideoPlayer;");
             _setUrl = env->GetMethodID(clazz, "setUrl", "(Ljava/lang/String;)V");
@@ -81,36 +80,44 @@ namespace linc {
         }
         
         void set_url(void *handle, const char *url) {
+            JNIEnv* env = (JNIEnv*)SDL_AndroidGetJNIEnv();
             jstring jurl = env->NewStringUTF(url);
             env->CallVoidMethod((jobject) handle, _setUrl, jurl);
             env->DeleteLocalRef(jurl);
         }
         
         void play(void *handle) {
+            JNIEnv* env = (JNIEnv*)SDL_AndroidGetJNIEnv();
             env->CallVoidMethod((jobject) handle, _play);
         }
         
         void pause(void *handle) {
+            JNIEnv* env = (JNIEnv*)SDL_AndroidGetJNIEnv();
             env->CallVoidMethod((jobject) handle, _pause);
         }
         
         void stop(void *handle) {
+            JNIEnv* env = (JNIEnv*)SDL_AndroidGetJNIEnv();
             env->CallVoidMethod((jobject) handle, _stop);
         }
         
         void resume(void *handle) {
+            JNIEnv* env = (JNIEnv*)SDL_AndroidGetJNIEnv();
             env->CallVoidMethod((jobject) handle, _resume);
         }
         
         void seek(void *handle, float seconds) {
+            JNIEnv* env = (JNIEnv*)SDL_AndroidGetJNIEnv();
             env->CallVoidMethod((jobject) handle, _seek, seconds);
         }
         
         void set_volume(void *handle, float volume) {
+            JNIEnv* env = (JNIEnv*)SDL_AndroidGetJNIEnv();
             env->CallVoidMethod((jobject) handle, _setVolume, volume);
         }
         
         const char* get_error(void *handle) {
+            JNIEnv* env = (JNIEnv*)SDL_AndroidGetJNIEnv();
             jstring jstr = (jstring) env->CallObjectMethod((jobject) handle, _getError);
             if(jstr == NULL) {
                 return NULL;
@@ -122,14 +129,17 @@ namespace linc {
         }
         
         int get_time(void *handle) {
+            JNIEnv* env = (JNIEnv*)SDL_AndroidGetJNIEnv();
             return env->CallIntMethod((jobject) handle, _getTime);
         }
         
         void render_to_texture(void *handle, int textureUnit, int textureName) {
+            JNIEnv* env = (JNIEnv*)SDL_AndroidGetJNIEnv();
             env->CallVoidMethod((jobject) handle, _renderToTexture, textureUnit, textureName);
         }
         
         void destroy(void *handle) {
+            JNIEnv* env = (JNIEnv*)SDL_AndroidGetJNIEnv();
             // TODO: remove from handles
             env->DeleteGlobalRef((jobject) handle);
             env->CallVoidMethod((jobject) handle, _destroy);
