@@ -77,17 +77,13 @@ public class VideoPlayer {
             player.setDataSource(url);
             player.prepareAsync();
         } catch(IOException ex) {
-            Log.i(TAG, ex.toString());
-            ex.printStackTrace();
+            onError(ex.toString() + " " + ex.getMessage());
         } catch(IllegalArgumentException ex) {
-            Log.i(TAG, ex.toString());
-            ex.printStackTrace();
+            onError(ex.toString() + " " + ex.getMessage());
         } catch(SecurityException ex) {
-            Log.i(TAG, ex.toString());
-            ex.printStackTrace();
+            onError(ex.toString() + " " + ex.getMessage());
         } catch(IllegalStateException ex) {
-            Log.i(TAG, ex.toString());
-            ex.printStackTrace();
+            onError(ex.toString() + " " + ex.getMessage());
         }
     }
 
