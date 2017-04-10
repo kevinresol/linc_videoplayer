@@ -25,41 +25,41 @@ public class VideoPlayer {
         player = new MediaPlayer();
         Log.i(TAG, "Created MediaPlayer");
 
-        final VideoPlayer wrapper = this;
+        final VideoPlayer self = this;
         player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mp) {
-                wrapper.onReady();
-                wrapper.onDurationChanged(player.getDuration());
-                wrapper.play();
+                self.onReady();
+                self.onDurationChanged(player.getDuration());
+                self.play();
             }
         });
 
         player.setOnVideoSizeChangedListener(new MediaPlayer.OnVideoSizeChangedListener() {
             @Override
             public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
-                wrapper.onVideoSizeChanged(width, height);
+                self.onVideoSizeChanged(width, height);
             }
         });
 
         player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
-                wrapper.onPlayingStateChanged(false);
+                self.onPlayingStateChanged(false);
             }
         });
 
         player.setOnSeekCompleteListener(new MediaPlayer.OnSeekCompleteListener() {
             @Override
             public void onSeekComplete(MediaPlayer mp) {
-                wrapper.onPlayingStateChanged(true);
+                self.onPlayingStateChanged(true);
             }
         });
 
         player.setOnErrorListener(new MediaPlayer.OnErrorListener() {
             @Override
             public boolean onError(MediaPlayer mp, int what, int extra) {
-                wrapper.onError("Error - what:" + what + ", extra:" + extra);
+                self.onError("Error - what:" + what + ", extra:" + extra + " (see: https://developer.android.com/reference/android/media/MediaPlayer.OnErrorListener.html)");
                 return false;
             }
         });
