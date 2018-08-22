@@ -119,7 +119,8 @@ public class VideoPlayer {
         surfaceTexture.updateTexImage();
     }
     public void destroy() {
-        // TODO
+        player.release();
+        player = null;
     }
 
     public int getTime() {
